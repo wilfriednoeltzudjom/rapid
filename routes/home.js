@@ -5,10 +5,14 @@ const router = rapid.Router();
 const render = require('../helpers/render');
 
 router.get('/', async (req, res) => {
-  const contents = await render('index');
+  try {
+    const contents = await render('index');
 
-  res.writeHead(200, { 'Content-type': 'text/html' });
-  res.end(contents);
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    return res.end(contents);
+  } catch (error) {
+    
+  }
 })
 
 module.exports = router;

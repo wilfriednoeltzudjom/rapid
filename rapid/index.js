@@ -49,7 +49,13 @@ class Rapid {
     this.routes.push({ rootPath, routes: router.routes });
   }
 
-  start = (port) => {
+  loadError = async (responseCode, res) => {
+    res.writeHead(responseCode, { 'Content-type': 'text/html' });
+    const contents = await render(`${responseCode}`, 'errors');
+    res.end(contents)
+  }
+
+  start = (port, callback) => {
     const server = http.createServer((req, res) => {
       const { url, method } = req;
       const route = this.routes.find(object => object.rootPath === url);
@@ -59,13 +65,10 @@ class Rapid {
         return subRoute.callback(req, res);
       }   
 
-      res.writeHead(404, { 'Content-type': 'text/html' });
-      res.end(render('404', 'errors'))
+      return this.loadError(404, res);
     });
 
-    return new Promise((resolve, reject) => {
-      resolve(server.listen(port));
-    })
+    return server.listen(port, callback);
   }
 }
 

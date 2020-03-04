@@ -6,6 +6,6 @@ app.use('/', require('./routes/home'));
 
 const PORT = 5000;
 
-app.start(PORT).then(() => {
+app.start(PORT, () => {
   console.log(`[server] started on port ${PORT}`);
 })
